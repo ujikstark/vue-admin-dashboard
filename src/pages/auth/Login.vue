@@ -53,7 +53,6 @@ import { useRouter } from 'vue-router'
 import { useForm, useToast } from 'vuestic-ui'
 import { validators } from '../../services/utils'
 import { useAuthStore } from '../../stores/auth'
-import { RefSymbol } from '@vue/reactivity'
 
 const { validate } = useForm('form')
 const { push } = useRouter()
@@ -71,16 +70,18 @@ const formData = reactive({
 const submit = async () => {
   try {
     if (validate()) {
-      isLoading.value = true
-      await authStore.login({ email: formData.email, password: formData.password })
-      await authStore.fetchUser()
-      isLoading.value = false
+      isLoading.value = true;
+      await authStore.login({ email: formData.email, password: formData.password });
+      await authStore.fetchUser();
+      isLoading.value = false;
       await push({ name: 'dashboard' })
-      init({ message: "You've successfully logged in", color: 'success' })
+      init({ message: "You've successfully logged in", color: 'success' });
     }
   } catch (err) {
-    init({ message: 'Error', color: 'warning' })
-    throw err
+    isLoading.value = false;
+    init({ message: 'Error: ' + err.message, color: 'warning' });
+
+    throw err;
   }
 }
 </script>

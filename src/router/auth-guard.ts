@@ -4,9 +4,21 @@ import { useAuthStore } from '../stores/auth'
 
 export const authGuard = (to: RouteLocationNormalized, from: RouteLocationNormalized, next: NavigationGuardNext) => {
   const authStore = useAuthStore()
-  if (authStore.isAuthenticated) {
+  authStore.initializeAuth()
+  if (authStore.isAuthenticated && !authStore.isTokenExpired) {
     next()
   } else {
+    authStore.logout()
     next({ name: 'login' })
+  }
+}
+
+export const guestGuard = (to: RouteLocationNormalized, from: RouteLocationNormalized, next: NavigationGuardNext) => {
+  const authStore = useAuthStore()
+  authStore.initializeAuth()
+  if (authStore.isAuthenticated && !authStore.isTokenExpired) {
+    next({ name: 'dashboard' })
+  } else {
+    next()
   }
 }

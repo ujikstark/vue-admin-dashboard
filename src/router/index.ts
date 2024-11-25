@@ -4,7 +4,7 @@ import AuthLayout from '../layouts/AuthLayout.vue'
 import AppLayout from '../layouts/AppLayout.vue'
 
 import RouteViewComponent from '../layouts/RouterBypass.vue'
-import { authGuard } from './auth-guard'
+import { authGuard, guestGuard } from './auth-guard'
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -79,11 +79,13 @@ const routes: Array<RouteRecordRaw> = [
       {
         name: 'login',
         path: 'login',
+        beforeEnter: guestGuard,
         component: () => import('../pages/auth/Login.vue'),
       },
       {
         name: 'signup',
         path: 'signup',
+        beforeEnter: guestGuard,
         component: () => import('../pages/auth/Signup.vue'),
       },
       {
